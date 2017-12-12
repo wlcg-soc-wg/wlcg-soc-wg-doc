@@ -15,6 +15,7 @@
   * [Capture Network Interface Card tweaks](bro/nic_tweaks.md)
   * [Deploying PF_RING](bro/deployment_pfring.md)
   * [Deploying Bro](bro/deployment_bro.md)
+  * [Configuration](bro/configuration.md)
 
 * [Integrations](integrations/README.md)
   * [MISP to Bro](integrations/misp_bro.md)
