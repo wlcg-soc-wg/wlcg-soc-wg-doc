@@ -26,6 +26,15 @@ MISP requires Redis for a number of features (state of background workers, cachi
 
 It is highly recommended to use HTTPS (TLS) for your MISP instance. While it's technically possible to use a self generated certificate we highly advice against doing that. Best would be to have a certificate issued by a certificate authority that's part of the bundle that comes with most web browsers and operating systems. If you don't have access to a commercial certificate authority you can use one of the free CAs such as Let's Encrypt. Using a certificate issues by your grid CA would be another possibility although that may pose problems for other peers connecting to your instance and not having your CA's root certificate installed.
 
+Here's how to generate the CSR (certificate signing request) if you're using a third party CA:
+
+```
+# To generate csr (to get public facing certificate)
+openssl genrsa -out /etc/pki/tls/certs/misp.key 2048
+openssl req -new -sha256 -key /etc/pki/tls/certs/misp.key -out /etc/pki/tls/certs/misp.csr
+
+```
+
 ## Masterless Puppet
 
 One of the easiest ways of deploying MISP is by using Puppet in masterless mode.
@@ -36,11 +45,16 @@ The first step would be to create a virtual machine. In this case we are going t
 
 2. Install puppet-agent (the Puppet MISP module requires Puppet 4):
 
-    yum install puppet-agent
+```
+yum install https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+yum install puppet-agent
+```
 
 In addition a symbolic link for the default hiera variables might be needed:
 
-    ln -s /etc/hiera.yaml /etc/puppet/hiera.yaml
+```
+ln -s /etc/hiera.yaml /etc/puppet/hiera.yaml
+```
 
 3. Install the required modules:
 
