@@ -261,22 +261,42 @@ node default {
 
 5. Run puppet:
 
-    puppet apply /etc/puppet/manifests/site.pp
+```
+puppet apply /etc/puppet/manifests/site.pp
+```
 
 Note that `site.pp` is the name that we gave to the manifest created in step number 4, but it can take whatever other name.
 
 6. Load the DB schema:
 
-    mysql -D misp -u misp -p < /var/www/MISP/INSTALL/MYSQL.sql
+```
+mysql -D misp -u misp -p < /var/www/MISP/INSTALL/MYSQL.sql
+```
 
 The default password is `mispdb`.
 
 Once all this has been done we can connect to the MISP instance in the browser by typing there the ip of the VM. It will ask for login and we can use:
 
-    user       -  admin@admin.test
-    password   -  admin
+```
+user       -  admin@admin.test
+password   -  admin
+```
 
 And then change the password as it is asked by the platform.
+
+7. Additional packages
+
+You will need to install the `rh-php56-php-opcache` package to be able to edit the configuration from the UI (Administration section).
+
+```
+yum install rh-php56-php-opcache
+```
+
+After installing this package please remember to start the `rh-php56-php-fpm` service:
+
+```
+systemctl restart rh-php56-php-fpm
+```
 
 ## Using Puppet in agent / master mode
 
