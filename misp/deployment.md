@@ -34,9 +34,9 @@ The first step would be to create a virtual machine. In this case we are going t
 
 1. Install the OS in the VM.
 
-2. Install puppet:
+2. Install puppet-agent (the Puppet MISP module requires Puppet 4):
 
-    yum install puppet
+    yum install puppet-agent
 
 In addition a symbolic link for the default hiera variables might be needed:
 
@@ -48,15 +48,25 @@ In addition a symbolic link for the default hiera variables might be needed:
 puppet module install puppetlabs-apache #(dependencies: puppetlabs-stdlib, puppetlabs-concat)
 puppet module install puppetlabs-inifile
 puppet module install puppetlabs-firewall
-puppet module install puppetlabs-vcsrepo
+puppet module install puppetlabs-vcsrepo -v 1.5.0 # unfortunately the version number needs to be fixed here
 puppet module install camptocamp-openssl #(dependencies: puppetlabs-stdlib). Note that you need to enforce version 1.9.0.
 puppet module install edestecd-mariadb #(dependencies: puppetlabs-apt, puppetlabs-mysql, puppet-staging, puppetlabs-stdlib)
+puppet module install arioch-redis
 puppet module install puppet-misp
 ```
 
 Note: you might need to install ``epel-release`` and ``centos-release-scl`` repositories.
 
-4. Create a puppet manifest and locate it under `/etc/puppet/manifests/``. An example manifest is:
+```
+# We need some packages from the Extra Packages for Enterprise Linux repository
+yum install epel-release
+
+# Since MISP 2.4 PHP 5.5 is a minimal requirement, so we need a newer version than CentOS base provides
+# Software Collections is a way do to this, see https://wiki.centos.org/AdditionalResources/Repositories/SCL
+yum install centos-release-scl
+```
+
+4. Create a Puppet manifest and save it as ``/etc/puppet/manifests/site.pp`` (you may need to create the ``/etc/puppet/manifests/`` directory). An example manifest is:
 
 ```puppet
 node default {
@@ -98,6 +108,12 @@ node default {
 
   class {'mariadb::server':
     root_password => 'mispdb',
+    databases   => {
+      'misp'  => {
+        ensure  => 'present',
+        charset => 'utf8',
+      },
+    },
     users                         => {
       'misp@localhost' => {
         ensure                   => 'present',
@@ -109,7 +125,7 @@ node default {
         tls_options              => ['NONE'],
       },
     },
-        grants => {
+    grants => {
       'misp@localhost/misp.*' => {
         ensure     => 'present',
         options    => ['GRANT'],
@@ -126,12 +142,6 @@ node default {
         options    => "IDENTIFIED BY ${$mysql_passwd}",
       },
     },
-    databases   => {
-      'misp'  => {
-        ensure  => 'present',
-        charset => 'utf8',
-      },
-    },
   }
 
   class {'::misp':
@@ -140,7 +150,7 @@ node default {
     showorgalternate           => true,
     timezone                   => 'Europe/Zurich',
     db_password                => 'mispdb',
-    org                        => 'WLCG',
+    org                        => 'ORGNAME',
   }
 
   ini_setting { 'php56.ini_session':
@@ -239,15 +249,15 @@ node default {
 
 5. Run puppet:
 
-    /usr/bin/puppet apply /etc/puppet/manifests/site.pp
+    puppet apply /etc/puppet/manifests/site.pp
 
 Note that `site.pp` is the name that we gave to the manifest created in step number 4, but it can take whatever other name.
 
 6. Load the DB schema:
 
-    mysqp -u misp -p < /var/www/MISP/INSTALL/MYSQL.sql
+    mysql -D misp -u misp -p < /var/www/MISP/INSTALL/MYSQL.sql
 
-The default password is `mariadb`.
+The default password is `mispdb`.
 
 Once all this has been done we can connect to the MISP instance in the browser by typing there the ip of the VM. It will ask for login and we can use:
 
