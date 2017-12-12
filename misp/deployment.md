@@ -35,6 +35,10 @@ openssl req -new -sha256 -key /etc/pki/tls/certs/misp.key -out /etc/pki/tls/cert
 
 ```
 
+## SELinux
+
+The Puppet manifests below assume that you have SELinux enabled. It should work with SELinux disabled or in permissive mode but it's highly recommended that you enable SELinux.
+
 ## Masterless Puppet
 
 One of the easiest ways of deploying MISP is by using Puppet in masterless mode.
@@ -49,6 +53,8 @@ The first step would be to create a virtual machine. In this case we are going t
 yum install https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
 yum install puppet-agent
 ```
+
+If you had Puppet 3 installed before installing Puppet 4, since with version 4 there has been a change of paths, you would either need to log out and log back in or change the `$PATH` variable in your environment to include `/opt/puppetlabs/bin/`.
 
 In addition a symbolic link for the default hiera variables might be needed:
 
@@ -146,14 +152,6 @@ node default {
         privileges => ['ALL'],
         table      => 'misp.*',
         user       => 'misp@localhost',
-      },
-      'misp@localhost/*.*' => {
-        ensure     => 'present',
-        options    => ['GRANT'],
-        privileges => ['USAGE'],
-        table      => '*.*',
-        user       => 'misp@localhost',
-        options    => "IDENTIFIED BY ${$mysql_passwd}",
       },
     },
   }
