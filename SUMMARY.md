@@ -4,7 +4,9 @@
 
 * [MISP](misp/README.md)
   * [Deployment](misp/deployment.md)
-  * [Troubleshooting and debugging MISP](troubleshooting.md)
+  * [Configuration](misp/configuration.md)
+  * [Setting up GnuPG](misp/gnupg.md)
+  * [Troubleshooting and debugging MISP](misp/troubleshooting.md)
   * [Sharing threat intelligence](misp/sharing.md)
   * [Contributing to the upstream Puppet module](misp/contributing_puppet_module.md)
 
