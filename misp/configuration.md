@@ -12,7 +12,7 @@ Wherever possible the names of the parameters for the `misp` Puppet class follow
 
 ### By editing the configuration file
 
-All the configuration options are stored in different files located in the configuration directory (by default `/install_dir/app/Config/`): `core.php`, `bootstrap.php`, `database.php` and `config.php`.
+All the configuration options are stored in different files located in the configuration directory (by default `/<install_dir>/app/Config/`): `core.php`, `bootstrap.php`, `database.php` and `config.php`.
 
 ### From the web UI
 
@@ -46,11 +46,14 @@ These two parameters are recommended to be set to `0` and `false` respectively. 
 - `password_policy_length` - Password length requirement. By default set to `6`.
 - `password_policy_complexity` - Password complexity requirement. By default set to `/((?=.\d)|(?=.\W+))(?![\n])(?=.[A-Z])(?=.[a-z]).*$/`.
 - `sanitise_attribute_on_delete` - Enabling this setting will sanitise the contents of an attribute on a soft delete. By default set to `false`.
+-  `hide_organisation_index_from_users` - Enabling this setting will block the organisation index from being visible to anyone besides site administrators on the current instance. Keep in mind that users can still see organisations that produce data via events, proposals, event history log entries, etc. By default is set to false.
 
 #### MISP
 
 - `live` - If set to `false` the instance will only be accessible by site admins. By default `true`.
+- `language` - The language MISP should use. The default is english.
 - `enable_advanced_correlations` - Enable some performance heavy correlations (currently CIDR correlation). By default `false`.
+- `max_correlations_per_event` - Sets the maximum number of correlations that can be fetched with a single event. For extreme edge cases this can prevent memory issues. The default value is 5000.
 - `maintenance_message` - The message that users will see if the instance is not live. By default set to `Great things are happening! MISP is undergoing maintenance, but will return shortly. You can contact the administration at \$email.`.
 - `footermidleft` - Footer text prepending the "Powered by MISP" text. Empty by default.
 - `footermidright` - Footer text following the "Powered by MISP" text. Empty by default.
@@ -68,6 +71,7 @@ These two parameters are recommended to be set to `0` and `false` respectively. 
 - `email` - The e-mail address that MISP should use for all notifications. By default `root@localhost`.
 - `disable_emailing` - When enabled, no outgoing e-mails will be sent by MISP. By default set to `false`.
 - `cached_attachments` - Allow the XML caches to include the encoded attachments. By default set to `true`.
+- `download_attachments_on_load` - Always download attachments when loaded by a user in a browser.
 - `contact` - The e-mail address that MISP should include as a contact address for the instance's support team. By default `root@localhost`.
 - `background_jobs` - Enables the use of MISP's background processing. By default set to `true`.
 - `cveurl` - Turns vulnerability type attributes into links linking to the provided CVE lookup. By default set to `http://cve.circl.lu/cve/`.
@@ -81,6 +85,7 @@ These two parameters are recommended to be set to `0` and `false` respectively. 
 - `welcome_text_bottom` - Used on the login page, after the MISP logo. Empty by default.
 - `welcome_logo` - Used on the login page, to the left of the MISP logo, upload it as a custom image in the file management tool. Empty by default.
 - `welcome_logo2` - Used on the login page, to the right of the MISP logo, upload it as a custom image in the file management tool. Empty by default.
+- `title_text` - Used in the page title, after the name of the page. By default is set to 'MISP'.
 - `take_ownership_xml_import` - Allows users to take ownership of an event uploaded via the "Add MISP XML" button. By default set to `false`.
 - `terms_download` - Choose whether the terms and conditions should be displayed inline (`false`) or offered as a download (`true`). By default set to false.
 - `terms_file` - The filename of the terms and conditions file. Make sure that the file is located in your `MISP/app/files/terms` directory. Empty by default.
@@ -94,6 +99,7 @@ These two parameters are recommended to be set to `0` and `false` respectively. 
 - `log_auth` - MISP will log all successful authentications using API keys. By default set to `false`.
 - `mangle_push_to_23` - When enabled, your 2.4+ instance can push events to MISP 2.3 installations. This is highly advised against and will result in degraded events and lost information. Use this at your own risk. By default set to `false`.
 - `delegation` - This feature allows users to created org only events and ask another organisation to take ownership of the event. This allows organisations to remain anonymous by asking a partner to publish an event for them. By default set to `false`.
+- `ssdeep_correlation_threshold` - Set the ssdeep score at which to consider two ssdeep hashes as correlating [1-100].
 - `show_correlations_on_index` - When enabled, the number of correlations visible to the currently logged in user will be visible on the event index UI. This comes at a performance cost but can be very useful to see correlating events at a glance. By default set to `false`.
 - `show_proposals_count_on_index` - When enabled, the number of proposals for the events are shown on the index. By default set to `false`.
 - `show_sightings_count_on_index` - When enabled, the aggregate number of attribute sightings within the event becomes visible to the currently logged in user on the event index UI. By default set to `false`.
@@ -111,6 +117,9 @@ These two parameters are recommended to be set to `0` and `false` respectively. 
 - `incoming_tags_disabled_by_default` - Enable this settings if new tags synced / added via incoming events from any source should not be selectable by users by default. By default set to `false`.
 - `completely_disable_correlation` - WARNING This setting will completely disable the correlation on this instance and remove any existing saved correlations. Enabling this will trigger a full recorrelation of all data which is an extremely long and costly procedure. Only enable this if you know what you're doing. By default set to `false`.
 - `allow_disabling_correlation` - WARNING This setting will give event creators the possibility to disable the correlation of individual events / attributes that they have created. By default set to `false`.
+- `event_view_filter_fields`* - Specify which fields to filter on when you search on the event view. Default values are : "id, uuid, value, comment, type, category, Tag.name"
+- `deadlock_avoidance`* - Only enable this if you have some tools using MISP with extreme high concurency. General performance will be lower as normal as certain transactional queries are avoided in favour of shorter table locks.
+- `syslog` - Enable this setting to pass all audit log entries directly to syslog. Keep in mind, this is verbose and will include user, organisation, event data. By default is set to false.
 
 #### GPG
 
@@ -147,6 +156,7 @@ These two parameters are recommended to be set to `0` and `false` respectively. 
 - `session_auto_regenerate` - Set to true to automatically regenerate sessions on activity (recommended). By default set to `false`.
 - `session_defaults` - The session type used by MISP. The default setting is `php`, which will use the session settings configured in `php.ini` for the session data (supported options: `php`, `database`). The recommended option is `php` and setting your PHP up to use redis sessions via your `php`.ini. Just add `session.save_handler = redis` and `session.save_path = 'tcp://localhost:6379'` (replace the latter with your redis connection) to. By default set to `php`.
 - `session_timeout` - The timeout duration of sessions (in minutes). Keep in mind that autoregenerate can be used to extend the session on user activity. By default set to `60`.
+- `session_cookie_timeout` - The expiration of the cookie (in MINUTES). The session timeout gets refreshed frequently, however the cookies do not. Generally it is recommended to have a much higher cookie_timeout than timeout.
 
 #### Plugins
 
@@ -172,6 +182,13 @@ These two parameters are recommended to be set to `0` and `false` respectively. 
 - `zeromq_redis_password` - The password, if set for Redis. Empty by default.
 - `zeromq_redis_database` - The database to be used for queuing messages for the pub / sub functionality. By default set to `1`.
 - `zeromq_redis_namespace` - The namespace to be used for queuing messages for the pub / sub functionality. By default set to `mispq`.
+- `zeromq_include_attachments` - Enable this setting to include the base64 encoded payloads of malware-samples/attachments in the output.
+- `zeromq_event_notifications_enable` - Enables or disables the publishing of any event creations/edits/deletions. By default is set to false.
+- `zeromq_object_notifications_enable` - Enables or disables the publishing of any object creations/edits/deletions. By default is set to false.
+- `zeromq_object_reference_notifications_enable` - Enables or disables the publishing of any object reference creations/deletions. By default is set to false.
+- `zeromq_attribute_notifications_enable` - Enables or disables the publishing of any attribute creations/edits/soft deletions. By default is set to false.
+- `zeromq_tag_notifications_enable` - Enables or disables the publishing of any tag creations/edits/deletions as well as tags being attached to / detached from various MISP elements.
+- `zeromq_audit_notifications_enable` - Enables or disables the publishing of log entries to the ZMQ pubsub feed. Keep in mind, this can get pretty verbose depending on your logging settings. By default its set to false.
 
 ##### Sightings
 
@@ -220,7 +237,12 @@ These two parameters are recommended to be set to `0` and `false` respectively. 
 - `cortex_services_enable` - Enable / disable the import services. By default set to `false`.
 - `cortex_services_url` - The URL used to access Cortex. By default, it is accessible at `http://cortex-url/api`.
 - `cortex_services_port` - The port used to access Cortex. By default, this is port `9000`.
+- `cortex_authkey` - Set an authentication key to be passed to Cortex.
 - `cortex_timeout` - Set a timeout for the import services. By default set to `120`.
+- `cortex_ssl_verify_peer` - Set to false to disable SSL verification. This is not recommended.
+- `cortex_ssl_verify_host` - Set to false if you wish to ignore hostname match errors when validating certificates.
+- `cortex_ssl_allow_self_signed` - Set to true to enable self-signed certificates to be accepted. This requires `cortex_ssl_verify_peer` to be enabled.
+- `cortex_ssl_cafile` - Set to the absolute path of the Certificate Authority file that you wish to use for verifying SSL certificates.
 
 #### Apache Shibboleth Authentication
 
