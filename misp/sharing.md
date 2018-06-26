@@ -1,5 +1,5 @@
 # Sharing in MISP
-In order to share threat intelligence MISP offers the "event" abstraction which is made of 0 or more attribute. These ones can be an IP, a domain, etc. (for more information on this see the [MISP book](https://github.com/MISP/misp-book)).
+In order to share threat intelligence MISP offers the "event" abstraction which is made of 0 or more attributes. These ones can be IPs, domain names, file hashes, etc. (for more information on this see the [MISP book](https://github.com/MISP/misp-book)).
 
 Things to take into account when sharing:
 
@@ -21,7 +21,7 @@ For example:
 
 ## Proposals
 
-Proposals are only shared upon **push** (not publishing) and they **will bypass** the push rules. Meaning that if another instance already has the event for which a proposal is made that instance will get the proposal even if the event should not be push because of the push rules.
+Proposals are only shared upon **push** (not publishing) and they **will bypass** the push rules. Meaning that if another instance already has the event for which a proposal is made that instance will get the proposal even if the event should not be pushed because of the push rules.
 
 An example use case would be:
 
