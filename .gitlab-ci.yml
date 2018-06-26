@@ -7,7 +7,8 @@ build:
   image: gitlab-registry.cern.ch/cloud/gitbook-ebook
   before_script:
     - mkdir public
-    - gitbook fetch latest
+    # Fetching a specific GitBook version due to the bug described at https://github.com/chusiang/gitbook.ansible.role/issues/5
+    - gitbook fetch 2.6.7
   script:
     - gitbook install
     - gitbook build $CI_PROJECT_DIR $CI_PROJECT_DIR/_book
