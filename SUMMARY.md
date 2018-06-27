@@ -19,6 +19,23 @@
   * [Deploying Bro](bro/deployment_bro.md)
   * [Configuration](bro/configuration.md)
 
+* [Elasticsearch](es/README.md):
+  * [CERN Setup](es/cern/README.md)
+  * [Best practices](es/best/README.md)
+    - [Aggregating data](es/best/aggregations.md)
+    - [Indices](es/best/Indices.md)
+    - [Shards](es/best/Shards.md)
+    - [Replicas](es/best/Replicas.md)
+    - [Fields](es/best/Fields.md)
+    - [Keyword](es/best/Keyword.md)
+    - [Norms](es/best/Norms.md)
+    - [Slowlogs](es/best/Slowlogs.md)
+    - [Aliases](es/best/Alias.md)
+    - [Cluster Organization](es/best/Cluster.md)
+  * [Anomaly detection and Alarming](es/anodet/README.md)
+    - [ElastAlert](es/anodet/elastalert.md)
+  * [Troubleshooting](troubleshooting/README.md)
+
 * [Integrations](integrations/README.md)
   * [MISP to Bro](integrations/misp_bro.md)
 
