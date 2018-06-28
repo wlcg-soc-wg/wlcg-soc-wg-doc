@@ -18,6 +18,7 @@
   * [Deploying PF_RING](bro/deployment_pfring.md)
   * [Deploying Bro](bro/deployment_bro.md)
   * [Configuration](bro/configuration.md)
+  * [Intelligence framework](bro/intel.md)
 
 * [Elasticsearch](es/README.md):
   * [CERN Setup](es/cern/README.md)
@@ -34,7 +35,7 @@
     - [Cluster Organization](es/best/Cluster.md)
   * [Anomaly detection and Alarming](es/anodet/README.md)
     - [ElastAlert](es/anodet/elastalert.md)
-  * [Troubleshooting](troubleshooting/README.md)
+  * [Troubleshooting](es/troubleshooting/README.md)
 
 * [Integrations](integrations/README.md)
   * [MISP to Bro](integrations/misp_bro.md)
