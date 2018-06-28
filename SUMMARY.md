@@ -19,6 +19,7 @@
   * [Deploying Bro](bro/deployment_bro.md)
   * [Configuration](bro/configuration.md)
   * [Alerting](bro/intel.md)
+  * [JSON Logs](json.md)
 
 * [Elasticsearch](es/README.md):
   * [CERN Setup](es/cern/README.md)

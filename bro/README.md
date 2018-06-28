@@ -7,3 +7,4 @@
 - [Deploying Bro](deployment_bro.md)
 - [Configuration](configuration.md)
 - [Alerting](intel.md)
+- [JSON Logs](json.md)
