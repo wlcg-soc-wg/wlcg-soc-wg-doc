@@ -18,7 +18,7 @@
   * [Deploying PF_RING](bro/deployment_pfring.md)
   * [Deploying Bro](bro/deployment_bro.md)
   * [Configuration](bro/configuration.md)
-  * [Intelligence framework](bro/intel.md)
+  * [Alerting](bro/intel.md)
 
 * [Elasticsearch](es/README.md):
   * [CERN Setup](es/cern/README.md)
