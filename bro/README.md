@@ -6,4 +6,4 @@
 - [Deploying PF_RING](deployment_pfring.md)
 - [Deploying Bro](deployment_bro.md)
 - [Configuration](configuration.md)
-- [Intelligence Framework](intel.md)
+- [Alerting](intel.md)
