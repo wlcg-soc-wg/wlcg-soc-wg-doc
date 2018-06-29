@@ -41,4 +41,7 @@
 * [Integrations](integrations/README.md)
   * [MISP to Bro](integrations/misp_bro.md)
 
+* [Networking](network/README.md)
+  * [Network layout and mirroring at CERN](network/cern.md)
+
 * [Glossary](GLOSSARY.md)
