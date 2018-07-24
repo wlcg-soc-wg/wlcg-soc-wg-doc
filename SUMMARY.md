@@ -45,3 +45,5 @@
   * [Network layout and mirroring at CERN](network/cern.md)
 
 * [Glossary](GLOSSARY.md)
+
+* [Resources](RESOURCES.md)
