@@ -42,3 +42,5 @@
   * [MISP to Bro](integrations/misp_bro.md)
 
 * [Glossary](GLOSSARY.md)
+
+* [Resources](RESOURCES.md)
