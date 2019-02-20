@@ -23,7 +23,7 @@ redef Intel::read_files += {
         feed_directory + "/url.txt",
 };
 ```
-We expire intel items after 20 minutes. Assuming that you have your MISP to Bro export configured to run every 15 minutes that will ensure that whatever IoCs get removed from MISP (because you've added a proposal to remove the for IDS flag for example) or expire (because the event has been published or re-publised for more than the amount of time defined in the MISP export script) will also get removed from Bro, with a 5 minute delay. We keep this 5 minutes buffer to account for possible delays in triggering the export. Of course you are more than welcome to adjust all these frequency of the export and intel item expiration to suit your needs.
+We expire intel items after 20 minutes. Assuming that you have your MISP to Zeek export configured to run every 15 minutes that will ensure that whatever IoCs get removed from MISP (because you've added a proposal to remove the for IDS flag for example) or expire (because the event has been published or re-publised for more than the amount of time defined in the MISP export script) will also get removed from Zeek, with a 5 minute delay. We keep this 5 minutes buffer to account for possible delays in triggering the export. Of course you are more than welcome to adjust all these frequency of the export and intel item expiration to suit your needs.
 
 Of course you are free to adapt the type of IoCs that you want to use for detection.
 
@@ -71,7 +71,7 @@ Under `/opt/bro/share/bro/site/` create a directory called `notice-extensions`. 
     ```
     # Extends the orginal script to add an identifier to the notices.
     # Jan Grashoefer (jan.grashofer@cern.ch) and Liviu Valsan (liviu.valsan@cern.ch)
-    # Original script is part of Bro.
+    # Original script is part of Zeek.
 
     @load base/frameworks/intel
     @load base/frameworks/notice
@@ -143,4 +143,4 @@ Under `/opt/bro/share/bro/site/` create a directory called `notice-extensions`. 
         }
     ```
 
-This improves the notifications sent by Bro to include context from MISP and also to suppress further alerts for the same IoC and the same device for the next 12 hours.
+This improves the notifications sent by Zeek to include context from MISP and also to suppress further alerts for the same IoC and the same device for the next 12 hours.

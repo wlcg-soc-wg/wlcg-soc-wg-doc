@@ -1,10 +1,10 @@
-# Bro:
+# Zeek:
 - [Hardware requirements](hardware_requirements.md)
 - [Recommended operating system](recommended_os.md)
 - [Software repository](software_repository.md)
 - [Capture Network Interface Card tweaks](nic_tweaks.md)
 - [Deploying PF_RING](deployment_pfring.md)
-- [Deploying Bro](deployment_bro.md)
+- [Deploying Zeek](deployment_zeek.md)
 - [Configuration](configuration.md)
 - [Alerting](intel.md)
 - [JSON Logs](json.md)

@@ -12,7 +12,7 @@ There are 2 means of getting logs written in JSON format.
 
     This will cause the logs to be written only in JSON format.
 
-1. Use the `add-json` Bro package: https://github.com/J-Gras/add-json
+1. Use the `add-json` Zeek package: https://github.com/J-Gras/add-json
 
     After installing the package using `bro-pkg install add-json` (you first need to have `bro-pkg` installed by using the instructions available at https://bro-package-manager.readthedocs.io/en/stable/) add the following to your `local.bro` file:
 

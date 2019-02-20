@@ -1,3 +1,3 @@
-# Deployment of Bro
+# Deployment of Zeek
 
 Start by installing the RPM.

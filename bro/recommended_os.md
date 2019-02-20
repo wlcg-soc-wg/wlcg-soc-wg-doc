@@ -1,3 +1,0 @@
-# Recommended operating system
-
-Bro can be deployed on a wide variety of different operating systems. The platform of choice inside WLCG is obviously Linux. Similarly to the myriad of operating systems supported, MISP can be deployed on a variety of different Linux distributions. Sites are free to choose the operating system and the Linux distribution. Nonetheless, we strongly recommend using CentOS 7 / SL 7 / RHEL 7. That's the distribution used at CERN and all provided resources (installation packages, configuration management code, documentation, scripts, etc) have been developed and tested on CentOS 7.
