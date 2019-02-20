@@ -2,11 +2,11 @@
 
 ## General system requirements
 
-- System type: Preferable to have a physical box dedicated to it, a VM is unlikely to be able to cope with the amount of traffic. Still, if you don’t have a physical box available (we recommend a dual socket server), Bro can be deployed on a VM for testing.
+- System type: Preferable to have a physical box dedicated to it, a VM is unlikely to be able to cope with the amount of traffic. Still, if you don’t have a physical box available (we recommend a dual socket server), Zeek can be deployed on a VM for testing.
 - Number of cores: The recommendation is to have at least 12 physical cores. Rule of thumb is that one core is able to handle 800 Mbps - 1 Gbps of network traffic (highly dependent on the number / type of scripts enabled).
-- Memory: At least 64 GB. Each Bro worker requires on average 6 GB of RAM.
+- Memory: At least 64 GB. Each Zeek worker requires on average 6 GB of RAM.
 - Disk space: As much as you can afford. The amount of disk space you have will determine the amount of log history you can store on disk. This is less important if you are shipping your logs to another storage system such as Elasticsearch or HDFS. Disk space doesn’t necessarily need to be local, you can also use a network filesystem to write to.
-- Storage type: HDD or SSD. While SSD will obviously perform better, Bro is not I/O bound as writes are batched together.
+- Storage type: HDD or SSD. While SSD will obviously perform better, Zeek is not I/O bound as writes are batched together.
 
 ## Network Interface Cards
 

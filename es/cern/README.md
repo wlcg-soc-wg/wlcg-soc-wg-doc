@@ -31,7 +31,7 @@ Access to Elasticsearch is granted both using basic authentication or via Kerber
 
 # Entry Point configuration
 
-Dedicated git repositories contain the configuration of the CERN Computer Security Elasticsearch clusters. The repository that holds the configuration of the cluster hosting the Bro logs can be accessed at: https://gitlab.cern.ch/it-elasticsearch-project/endpoint-cert-settings
+Dedicated git repositories contain the configuration of the CERN Computer Security Elasticsearch clusters. The repository that holds the configuration of the cluster hosting the Zeek logs can be accessed at: https://gitlab.cern.ch/it-elasticsearch-project/endpoint-cert-settings
 
 The settings include: curator, kibana settings, template management, etc.
 
@@ -95,5 +95,5 @@ Elasticsearch accepts the definition of templates that will be applied at the cr
 
 The CERN centralised Elasticsearch service offers the possibility to store those templates on a git repository, and apply them to the cluster. The user will send the requests to the git repo, and those templates will be synchronized every half an hour. 
 
-The templates used by the CERN Computer Security team for the creation of indices holding the Bro logs can be found at the following URL: https://gitlab.cern.ch/it-elasticsearch-project/endpoint-cert-settings/tree/master/templates
+The templates used by the CERN Computer Security team for the creation of indices holding the Zeek logs can be found at the following URL: https://gitlab.cern.ch/it-elasticsearch-project/endpoint-cert-settings/tree/master/templates
 

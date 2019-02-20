@@ -1,6 +1,6 @@
-# Exporting IoCs from MISP to Bro
+# Exporting IoCs from MISP to Zeek
 
-Bro comes with its own intelligence framework and MISP is able to do an export into the native format used by the Bro intelligence framework. The following script can be used for that:
+Zeek comes with its own intelligence framework and MISP is able to do an export into the native format used by the Zeek intelligence framework. The following script can be used for that:
 
 ```
 #!/bin/bash

@@ -1,2 +1,2 @@
 # Integration between different systems
-- [MISP to Bro](misp_bro.md)
+- [MISP to Zeek](misp_zeek.md)
