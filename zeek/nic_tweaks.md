@@ -10,7 +10,8 @@ ethtool -s <int> wol d
 ethtool -G <int> rx 4096 tx 4096
 ```
 
-Test whether Zeek is capturing all data
+** Test whether Zeek is capturing all data
+
 ```
  cat capture_loss.log | bro-cut -d percent_lost
 0.027187
@@ -20,7 +21,21 @@ Test whether Zeek is capturing all data
 0.009548
 ```
 
-if the percent_lost is more than 1% then something is not right. One of the issue we have seen is default setting of ethernet card. It is explained here
+if the percent_lost is more than 1% then something is not right. One of the issue we have seen is default setting of ethernet card which can be changed through ethtool
+Full explaination is here:
 
-https://blog.securityonion.net/2011/10/when-is-full-packet-capture-not-full.html 
+https://blog.securityonion.net/2011/10/when-is-full-packet-capture-not-full.html
+```
+ethtool -K eth0 rx off
+ethtool -K eth0 tx off
+ethtool -K eth0 sg off
+ethtool -K eth0 tso off
+ethtool -K eth0 ufo off
+ethtool -K eth0 gso off
+ethtool -K eth0 gro off
+ethtool -K eth0 lro off
+```
+
+It is better to check the default value first and then change one parameter at a time.
+
 
