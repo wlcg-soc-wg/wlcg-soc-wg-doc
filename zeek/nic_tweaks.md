@@ -9,3 +9,18 @@ Other tweaks to be made at the NIC level is to disable WOL and to increase the R
 ethtool -s <int> wol d
 ethtool -G <int> rx 4096 tx 4096
 ```
+
+Test whether Zeek is capturing all data
+```
+ cat capture_loss.log | bro-cut -d percent_lost
+0.027187
+0.186245
+0.009625
+0.180055
+0.009548
+```
+
+if the percent_lost is more than 1% then something is not right. One of the issue we have seen is default setting of ethernet card. It is explained here
+
+https://blog.securityonion.net/2011/10/when-is-full-packet-capture-not-full.html 
+
