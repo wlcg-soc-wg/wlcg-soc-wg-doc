@@ -5,6 +5,7 @@
 * [MISP](misp/README.md)
   * [Deployment](misp/deployment.md)
   * [Configuration](misp/configuration.md)
+  * [Syncing with WLCG instance](misp/sync.md)
   * [Setting up GnuPG](misp/gnupg.md)
   * [Troubleshooting and debugging MISP](misp/troubleshooting.md)
   * [Sharing threat intelligence](misp/sharing.md)
