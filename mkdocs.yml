@@ -1,0 +1,51 @@
+site_author: WLCG SOC WG
+site_description: Documentation for the WLCG Security Operations Centers Working Group
+site_name: WLCG Security Operations Centers Working Group documentation
+site_url: https://wlcg-soc-wg-doc.web.cern.ch
+nav:
+- Introduction: index.md
+- MISP:
+  - Introduction: misp/index.md
+  - Deployment: misp/deployment.md
+  - Configuration: misp/configuration.md
+  - Syncing with WLCG instance: misp/sync.md
+  - Setting up GnuPG: misp/gnupg.md
+  - Troubleshooting and debugging MISP: misp/troubleshooting.md
+  - Sharing threat intelligence: misp/sharing.md
+  - Contributing to the upstream Puppet module: misp/contributing_puppet_module.md
+- Zeek:
+  - Introduction: zeek/index.md
+  - Hardware requirements: zeek/hardware_requirements.md
+  - Recommended operating system: zeek/recommended_os.md
+  - Software repository: zeek/software_repository.md
+  - Capture Network Interface Card tweaks: zeek/nic_tweaks.md
+  - Deploying PF_RING: zeek/deployment_pfring.md
+  - Deploying Zeek: zeek/deployment_zeek.md
+  - Configuration: zeek/configuration.md
+  - Alerting: zeek/intel.md
+  - JSON Logs: zeek/json.md
+- Elasticsearch:
+  - Introduction: es/index.md
+  - CERN Setup: es/cern/index.md
+  - Best practices: es/best/index.md
+  - Aggregating data: es/best/aggregations.md
+  - Indices: es/best/indices.md
+  - Shards: es/best/shards.md
+  - Replicas: es/best/replicas.md
+  - Fields: es/best/fields.md
+  - Keyword: es/best/keyword.md
+  - Norms: es/best/norms.md
+  - Slowlogs: es/best/slowlogs.md
+  - Aliases: es/best/alias.md
+  - Cluster Organization: es/best/cluster.md
+  - Anomaly detection and Alarming: es/anodet/index.md
+  - ElastAlert: es/anodet/elastalert.md
+  - Troubleshooting: es/troubleshooting/index.md
+- Integrations:
+  - Introduction: integrations/index.md
+  - MISP to Zeek: integrations/misp_zeek.md
+- Networking:
+  - Introduction: network/index.md
+  - Network layout and mirroring at CERN: network/cern.md
+- Glossary: glossary.md
+- Resources: resources.md
