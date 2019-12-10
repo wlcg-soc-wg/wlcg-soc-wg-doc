@@ -6,6 +6,8 @@ site_url: https://wlcg-soc-wg-doc.web.cern.ch
 theme:
   name: material
 
+use_directory_urls: false
+
 nav:
 - Introduction: index.md
 - MISP:
