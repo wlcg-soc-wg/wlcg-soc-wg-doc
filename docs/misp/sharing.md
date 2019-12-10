@@ -17,7 +17,9 @@ Take into account that these filters are an OR between the same category (tag or
 
 For example:
 
-    ((tag1 OR tag2) AND !tag3 AND !tag4) AND ((org1 OR org2) AND !org3)
+```
+((tag1 OR tag2) AND !tag3 AND !tag4) AND ((org1 OR org2) AND !org3)
+```
 
 ## Proposals
 

@@ -2,22 +2,24 @@
 
 There are 2 means of getting logs written in JSON format.
 
-1. In your `local.bro` file add the following:
+### Use Zeek built-in functionality
 
-    ```
-    @load tuning/json-logs
+In your `local.bro` file add the following:
 
-    redef LogAscii::use_json=T;
-    ```
+```
+@load tuning/json-logs
 
-    This will cause the logs to be written only in JSON format.
+redef LogAscii::use_json=T;
+```
 
-1. Use the `add-json` Zeek package: https://github.com/J-Gras/add-json
+This will cause the logs to be written only in JSON format.
 
-    After installing the package using `bro-pkg install add-json` (you first need to have `bro-pkg` installed by using the instructions available at https://bro-package-manager.readthedocs.io/en/stable/) add the following to your `local.bro` file:
+### Use the [add-json Zeek package](https://github.com/J-Gras/add-json)
 
-    ```
-    @load add-json
-    ```
+After installing the package using `bro-pkg install add-json` (you first need to have `bro-pkg` installed by using the instructions available at <https://bro-package-manager.readthedocs.io/en/stable/>) add the following to your `local.bro` file:
 
-    This provides greater frexibility than the native JSON format described above. In addition you get logs both in ASCII (tab delimited format) and in JSON format. Full documentation can be found on GitHub: https://github.com/J-Gras/add-json.
+```
+@load add-json
+```
+
+This provides greater flexibility than the native JSON format described above. In addition you get logs both in ASCII (tab delimited format) and in JSON format. Full documentation can be found on GitHub: <https://github.com/J-Gras/add-json>.

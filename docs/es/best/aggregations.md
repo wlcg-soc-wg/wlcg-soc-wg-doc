@@ -15,7 +15,7 @@ The raw documents describe the accesses to a port on a host by a user. The docum
 * clientip 	 188.185.164.175
 * cluster   	public
 * count 	    1
-* host 	     ess003.cern.ch
+* host 	     ess003.localdomain
 * httpversion   1.1
 * input_type    log
 * port 	     9,203
@@ -29,6 +29,7 @@ The existing plots were collecting data based on timestamp, auth, cluster, port 
 ## 2. Create query to aggregate
 
 The easiest way to aggregate the data is to use the aggregation from elasticsearch itself. First, we have to select the timeperiod, and then aggregate them.  A query like the following will do the trick for us
+
 ```
 [perfmon@localhost ~]$ cat search_access.json
  {
@@ -57,16 +58,17 @@ The easiest way to aggregate the data is to use the aggregation from elasticsear
   }
 }}}
 }
-
 ```
+
 Note a couple of important things on this query:
 * The time is relative to the current time, and rounded to the hour ('now-2h/h')
 * The results of the search are not returned back. Only the aggregations are sent back ("size":0)
 * For each aggregation, there is the maximum number of entries, in this example 100 ( "size":100)
 
 This query can be executed and it will return something like:
+
 ```
-[perfmon@localhost ~]$ curl "http://es-perfmon.cern.ch/es/perfmon_logstash*/logstash_apacheaccess/_search?pretty" -d "@/etc/logstash/conf.d_access/search_access.json"
+[perfmon@localhost ~]$ curl "http://localhost/es/perfmon_logstash*/logstash_apacheaccess/_search?pretty" -d "@/etc/logstash/conf.d_access/search_access.json"
 {
   "took" : 769,
   "timed_out" : false,
@@ -93,8 +95,8 @@ This query can be executed and it will return something like:
             "key" : "itdb",
             "doc_count" : 357270,
             ...
-
 ```
+
 Note that for every aggregation, there are two fields, doc_count and sum_other_doc_count, that returns the total number of documents on that aggregation, and the ones that are not within the limits specified.
 ## 3. Run the query periodically
 Now that the query has been selected, it has to be scheduled to run with a certain frequency. The following logstash configuration will do the trick, querying every ten minutes
@@ -116,7 +118,7 @@ The result of the previous exercise is a single document. The next step is to br
 filter {
    json{ source => "message"
         remove_field => ["message", "host", "command", "hits", "_shards", "took", "timeout", "timed_out", "@version"]
-        add_field => {"stats_host" => "psaiz01.cern.ch" }
+        add_field => {"stats_host" => "test" }
       }
    split { field => "aggregations[2][buckets]"
            target => "subbuckets"
@@ -147,8 +149,8 @@ filter {
            remove_field =>  ["sub_response"]
   }
 }
-
 ```
+
 Things to note here:
 * The first filter, json, transform the message into json format, drops some unnecessary fields, and adds one with the current host
 * Each of the split filters creates individual documents for the corresponding subaggregation
@@ -156,10 +158,11 @@ Things to note here:
 
 ## 4. Insert results in another index
 Since logstash has been used for the massaging of the data, let's use it also for inserting the results:
+
 ```
 output {
   elasticsearch {
-      hosts => "https://es-entrypoint.cern.ch:9203"
+      hosts => "https://es-entrypoint.localdomain:9203"
       user => "some_user"
       password => "some_secret"
       manage_template => false
@@ -169,13 +172,12 @@ output {
     }
 }
 ```
+
 Note that the document_id has been specified, and it includes all the fields selected for the statistics. This way, we ensure that, if the same period is calculated multiple times, the results will overwrite each other.
 
-Please also note that the use of port 9203 is deprecated. Use https://es-entrypoint.cern.ch/es instead. It is still provided for backward compatibility. Also issues have been seen with older versions of logstash when the `/es` path was used.
+## 5. Change Kibana visualizations to use statistics
 
-## 5. Change kibana visualizations to use statistics
-
-Now that there is a new index with the statistics, the last step is to change the visualizations in kibana to search in the new index, and to plot the sum of the field 'count' instead of just counting the number of documents.
+Now that there is a new index with the statistics, the last step is to change the visualizations in Kibana to search in the new index, and to plot the sum of the field 'count' instead of just counting the number of documents.
 
 ## 6. Closing/deleting old indices
 
@@ -184,23 +186,3 @@ The statistics can be used to generate several different plots. Sometimes it is 
 ## 7. Running in high availability
 
 Logstash is usually configured to run on a single machine, which is a single point of failure. A possible solution to this is to configure the service on several machines. Then, each node checks if the statistics have been generated recently, and who did it. If the statistics are not being generated the node will start the logstash service. If the statistics are being generated by another node, the node will stop logstash.
-
-## 8. Running logstash from acron
-Logstash is made to be run as a continuously running service. Therefore, it is not straight-forward to run it within acron which implies a one-shot operation. Also, using acron is not a way to grant high availability
-because the acron server itself is a single point of failure. If not dedicated machine is available to run logstash it may be useful though to go down this road. You need to create a wrapper script which you execute
-from acron periodically.
-* use curl directly to retrieve the input data, and store it in a temporary file
-* Use the stdin input plugin for ES like this:
-```bash
-input {
-   stdin {
-      type => "stdin-type"
-   }
-}
-```
-* run logstash like this:
-```bash
-logstash  -f /path/to/logstash/configfile/logstash_access.conf < $tmpfile
-```
-Note that logstash is not available on aiadm nor on lxplus. You have to install the proper version locally in your home directory. Also make sure that logstash_access.conf is protected so that any access credentials in there
-are not readable by anybody but you.
