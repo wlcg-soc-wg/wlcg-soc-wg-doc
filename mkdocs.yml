@@ -2,6 +2,10 @@ site_author: WLCG SOC WG
 site_description: Documentation for the WLCG Security Operations Centers Working Group
 site_name: WLCG Security Operations Centers Working Group documentation
 site_url: https://wlcg-soc-wg-doc.web.cern.ch
+
+theme:
+    name: readthedocs
+
 nav:
 - Introduction: index.md
 - MISP:
