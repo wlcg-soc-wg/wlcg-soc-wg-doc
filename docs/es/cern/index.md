@@ -24,20 +24,18 @@ A default installation has the following restrictions:
 The following features are available by default (on port 443):
 * egroup based full kibana access (create, update and save dashboards and visualisations)
 * kibana read-only access (view dashboards, no rights to change or save them though)
-* egroup based read/write Elasticsearch access
+* egroup based read / write Elasticsearch access
 * egroup based read only Elasticsearch access
 
-Access to Elasticsearch is granted both using basic authentication or via Kerberos/egroups. Basic authentication is still useful if you need to run clients which do not support Kerberos authentication, like Logstash.
+Access to Elasticsearch is granted both using basic authentication or via Kerberos / egroups. Basic authentication is still useful if you need to run clients which do not support Kerberos authentication, like Logstash.
 
 # Entry Point configuration
 
-Dedicated git repositories contain the configuration of the CERN Computer Security Elasticsearch clusters. The repository that holds the configuration of the cluster hosting the Zeek logs can be accessed at: https://gitlab.cern.ch/it-elasticsearch-project/endpoint-cert-settings
-
-The settings include: curator, kibana settings, template management, etc.
+Dedicated git repositories contain the configuration of the CERN Computer Security Elasticsearch clusters. The settings include: curator, kibana settings, template management, etc.
 
 ### Curator configuration
 
-We are using curator as a tool to close and delete old indices. The official documentation of the tool can be found at  https://www.elastic.co/guide/en/elasticsearch/client/curator/current/index.html
+We are using curator as a tool to close and delete old indices. The official documentation of the tool can be found at  <https://www.elastic.co/guide/en/elasticsearch/client/curator/current/index.html>
 
 The current version of curator, curator 4, can interact with elasticsearch 2 and elasticsearch 5. Please, note that the syntax has changed from the previous version of curator. 
 
@@ -91,9 +89,6 @@ actions:
 
 ### Elasticsearch templates in git
 
-Elasticsearch accepts the definition of templates that will be applied at the creation of new indices. This is very useful to ensure that the types are correctly specified, and to define aliases. The documentation is available at https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
+Elasticsearch accepts the definition of templates that will be applied at the creation of new indices. This is very useful to ensure that the types are correctly specified, and to define aliases. The documentation is available at <https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html>
 
 The CERN centralised Elasticsearch service offers the possibility to store those templates on a git repository, and apply them to the cluster. The user will send the requests to the git repo, and those templates will be synchronized every half an hour. 
-
-The templates used by the CERN Computer Security team for the creation of indices holding the Zeek logs can be found at the following URL: https://gitlab.cern.ch/it-elasticsearch-project/endpoint-cert-settings/tree/master/templates
-

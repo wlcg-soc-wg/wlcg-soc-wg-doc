@@ -45,258 +45,260 @@ One of the easiest ways of deploying MISP is by using Puppet in masterless mode.
 
 The first step would be to create a virtual machine. In this case we are going to use CentOS 7, although it should work perfectly fine on other versions of CentOS / RHEL. Nevertheless, note that the MISP module only support those families and is not made for other Linux distributions (e.g. Debian).
 
-1. Install the OS in the VM.
+### Install the OS in the VM.
 
-2. Install puppet-agent (the Puppet MISP module requires Puppet 4):
+### Install puppet-agent (the Puppet MISP module requires Puppet 4)
 
-    ```
-    yum install https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
-    yum install puppet-agent
-    ```
+```
+yum install https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+yum install puppet-agent
+```
 
-    If you had Puppet 3 installed before installing Puppet 4, since with version 4 there has been a change of paths, you would either need to log out and log back in or change the `$PATH` variable in your environment to include `/opt/puppetlabs/bin/`.
+If you had Puppet 3 installed before installing Puppet 4, since with version 4 there has been a change of paths, you would either need to log out and log back in or change the `$PATH` variable in your environment to include `/opt/puppetlabs/bin/`.
 
-    In addition a symbolic link for the default hiera variables might be needed:
+In addition a symbolic link for the default hiera variables might be needed:
 
-    ```
-    ln -s /etc/hiera.yaml /etc/puppet/hiera.yaml
-    ```
+```
+ln -s /etc/hiera.yaml /etc/puppet/hiera.yaml
+```
 
-3. Install the required modules:
+### Install the required modules
 
-    ```
-    puppet module install puppetlabs-apache #(dependencies: puppetlabs-stdlib, puppetlabs-concat)
-    puppet module install puppetlabs-inifile
-    puppet module install puppetlabs-firewall
-    puppet module install puppetlabs-vcsrepo -v 1.5.0 # unfortunately the version number needs to be fixed here
-    puppet module install camptocamp-openssl #(dependencies: puppetlabs-stdlib). Note that you need to enforce version 1.9.0.
-    puppet module install edestecd-mariadb #(dependencies: puppetlabs-apt, puppetlabs-mysql, puppet-staging, puppetlabs-stdlib)
-    puppet module install arioch-redis
-    puppet module install puppet-misp
-    ```
+```
+puppet module install puppetlabs-apache #(dependencies: puppetlabs-stdlib, puppetlabs-concat)
+puppet module install puppetlabs-inifile
+puppet module install puppetlabs-firewall
+puppet module install puppetlabs-vcsrepo -v 1.5.0 # unfortunately the version number needs to be fixed here
+puppet module install camptocamp-openssl #(dependencies: puppetlabs-stdlib). Note that you need to enforce version 1.9.0.
+puppet module install edestecd-mariadb #(dependencies: puppetlabs-apt, puppetlabs-mysql, puppet-staging, puppetlabs-stdlib)
+puppet module install arioch-redis
+puppet module install puppet-misp
+```
 
-    Note: you might need to install ``epel-release`` and ``centos-release-scl`` repositories.
+Note: you might need to install ``epel-release`` and ``centos-release-scl`` repositories.
 
-    ```
-    # We need some packages from the Extra Packages for Enterprise Linux repository
-    yum install epel-release
+```
+# We need some packages from the Extra Packages for Enterprise Linux repository
+yum install epel-release
 
-    # Since MISP 2.4 PHP 5.5 is a minimal requirement, so we need a newer version than CentOS base provides
-    # Software Collections is a way do to this, see https://wiki.centos.org/AdditionalResources/Repositories/SCL
-    yum install centos-release-scl
-    ```
+# Since MISP 2.4 PHP 5.5 is a minimal requirement, so we need a newer version than CentOS base provides
+# Software Collections is a way do to this, see https://wiki.centos.org/AdditionalResources/Repositories/SCL
+yum install centos-release-scl
+```
 
-4. Create a Puppet manifest and save it as ``/etc/puppet/manifests/site.pp`` (you may need to create the ``/etc/puppet/manifests/`` directory). An example manifest is:
+### Create the Puppet manifest
 
-    ```puppet
-    node default {
+Create a Puppet manifest and save it as ``/etc/puppet/manifests/site.pp`` (you may need to create the ``/etc/puppet/manifests/`` directory). An example manifest is:
 
-      # Generate certificates
-      class { '::openssl':
-        package_ensure         => latest,
-        ca_certificates_ensure => latest,
-      }
+```puppet
+node default {
 
-      openssl::certificate::x509 { "${::fqdn}":
-        ensure       => present,
-        country      => 'CH',
-        organization => "${::fqdn}",
-        commonname   => "${::fqdn}",
-        base_dir     => '/etc/pki/tls/certs/',
-        owner        => 'apache',
-      }
+  # Generate certificates
+  class { '::openssl':
+    package_ensure         => latest,
+    ca_certificates_ensure => latest,
+  }
 
-      package {
-        "iptables-services": ensure => latest,
-      }
+  openssl::certificate::x509 { "${::fqdn}":
+    ensure       => present,
+    country      => 'CH',
+    organization => "${::fqdn}",
+    commonname   => "${::fqdn}",
+    base_dir     => '/etc/pki/tls/certs/',
+    owner        => 'apache',
+  }
 
-      firewall { '100 allow https':
-        proto   => 'tcp',
-        dport   => '443',
-        action  => 'accept',
-        require => Package[iptables-services],
-      }
+  package {
+    "iptables-services": ensure => latest,
+  }
 
-      firewall { '101 allow http':
-        proto   => 'tcp',
-        dport   => '80',
-        action  => 'accept',
-        require => Package[iptables-services],
-      }
+  firewall { '100 allow https':
+    proto   => 'tcp',
+    dport   => '443',
+    action  => 'accept',
+    require => Package[iptables-services],
+  }
 
-      $mysql_passwd = mysql_password('mispdb')
+  firewall { '101 allow http':
+    proto   => 'tcp',
+    dport   => '80',
+    action  => 'accept',
+    require => Package[iptables-services],
+  }
 
-      class {'mariadb::server':
-        root_password => 'mispdb',
-        databases   => {
-          'misp'  => {
-            ensure  => 'present',
-            charset => 'utf8',
-          },
-        },
-        users                         => {
-          'misp@localhost' => {
-            ensure                   => 'present',
-            max_connections_per_hour => '0',
-            max_queries_per_hour     => '0',
-            max_updates_per_hour     => '0',
-            max_user_connections     => '0',
-            password_hash            => $mysql_passwd,
-            tls_options              => ['NONE'],
-          },
-        },
-        grants => {
-          'misp@localhost/misp.*' => {
-            ensure     => 'present',
-            options    => ['GRANT'],
-            privileges => ['ALL'],
-            table      => 'misp.*',
-            user       => 'misp@localhost',
-          },
-        },
-      }
+  $mysql_passwd = mysql_password('mispdb')
 
-      class {'::misp':
-        misp_git_tag               => 'v2.4.84',
-        show_correlations_on_index => true,
-        showorgalternate           => true,
-        timezone                   => 'Europe/Zurich',
-        db_password                => 'mispdb',
-        org                        => 'ORGNAME',
-      }
+  class {'mariadb::server':
+    root_password => 'mispdb',
+    databases   => {
+      'misp'  => {
+        ensure  => 'present',
+        charset => 'utf8',
+      },
+    },
+    users                         => {
+      'misp@localhost' => {
+        ensure                   => 'present',
+        max_connections_per_hour => '0',
+        max_queries_per_hour     => '0',
+        max_updates_per_hour     => '0',
+        max_user_connections     => '0',
+        password_hash            => $mysql_passwd,
+        tls_options              => ['NONE'],
+      },
+    },
+    grants => {
+      'misp@localhost/misp.*' => {
+        ensure     => 'present',
+        options    => ['GRANT'],
+        privileges => ['ALL'],
+        table      => 'misp.*',
+        user       => 'misp@localhost',
+      },
+    },
+  }
 
-      ini_setting { 'php56.ini_session':
-        ensure  => present,
-        require => Package[rh-php56],
-        path    => '/etc/opt/rh/rh-php56/php.ini',
-        section => 'Session',
-        setting => 'session.cookie_httponly',
-        value   => 'True',
-        notify  => Service[rh-php56-php-fpm],
-      }
-      ini_setting { 'php56.ini_max_execution_time':
-        ensure  => present,
-        require => Package[rh-php56],
-        path    => '/etc/opt/rh/rh-php56/php.ini',
-        section => 'PHP',
-        setting => 'max_execution_time',
-        value   => '300',
-        notify  => Service[rh-php56-php-fpm],
-      }
-        ini_setting { 'php56.ini_memory_limit':
-        ensure  => present,
-        require => Package[rh-php56],
-        path    => '/etc/opt/rh/rh-php56/php.ini',
-        section => 'PHP',
-        setting => 'memory_limit',
-        value   => '512M',
-        notify  => Service[rh-php56-php-fpm],
-      }
-      ini_setting { 'php56.ini_upload_max_filesize':
-        ensure  => present,
-        require => Package[rh-php56],
-        path    => '/etc/opt/rh/rh-php56/php.ini',
-        section => 'PHP',
-        setting => 'upload_max_filesize',
-        value   => '50M',
-        notify  => Service[rh-php56-php-fpm],
-      }
-      ini_setting { 'php56.ini_post_max_size':
-        ensure  => present,
-        require => Package[rh-php56],
-        path    => '/etc/opt/rh/rh-php56/php.ini',
-        section => 'PHP',
-        setting => 'post_max_size',
-        value   => '50M',
-        notify  => Service[rh-php56-php-fpm],
-      }
+  class {'::misp':
+    misp_git_tag               => 'v2.4.84',
+    show_correlations_on_index => true,
+    showorgalternate           => true,
+    timezone                   => 'Europe/Zurich',
+    db_password                => 'mispdb',
+    org                        => 'ORGNAME',
+  }
 
-      #Apache
+  ini_setting { 'php56.ini_session':
+    ensure  => present,
+    require => Package[rh-php56],
+    path    => '/etc/opt/rh/rh-php56/php.ini',
+    section => 'Session',
+    setting => 'session.cookie_httponly',
+    value   => 'True',
+    notify  => Service[rh-php56-php-fpm],
+  }
+  ini_setting { 'php56.ini_max_execution_time':
+    ensure  => present,
+    require => Package[rh-php56],
+    path    => '/etc/opt/rh/rh-php56/php.ini',
+    section => 'PHP',
+    setting => 'max_execution_time',
+    value   => '300',
+    notify  => Service[rh-php56-php-fpm],
+  }
+    ini_setting { 'php56.ini_memory_limit':
+    ensure  => present,
+    require => Package[rh-php56],
+    path    => '/etc/opt/rh/rh-php56/php.ini',
+    section => 'PHP',
+    setting => 'memory_limit',
+    value   => '512M',
+    notify  => Service[rh-php56-php-fpm],
+  }
+  ini_setting { 'php56.ini_upload_max_filesize':
+    ensure  => present,
+    require => Package[rh-php56],
+    path    => '/etc/opt/rh/rh-php56/php.ini',
+    section => 'PHP',
+    setting => 'upload_max_filesize',
+    value   => '50M',
+    notify  => Service[rh-php56-php-fpm],
+  }
+  ini_setting { 'php56.ini_post_max_size':
+    ensure  => present,
+    require => Package[rh-php56],
+    path    => '/etc/opt/rh/rh-php56/php.ini',
+    section => 'PHP',
+    setting => 'post_max_size',
+    value   => '50M',
+    notify  => Service[rh-php56-php-fpm],
+  }
 
-      class { '::apache':
-        default_vhost => false,
-        serveradmin   => 'root@localhost',
-        trace_enable  => 'Off',
-      }
+  #Apache
 
-      class{'::apache::mod::proxy_fcgi':}
+  class { '::apache':
+    default_vhost => false,
+    serveradmin   => 'root@localhost',
+    trace_enable  => 'Off',
+  }
 
-      apache::vhost { "${::fqdn}-http":
-        port              => '80',
-        serveradmin       => 'root@localhost',
-        servername        => "${::fqdn}",
-        docroot           => '/var/www/MISP/app/webroot/',
-        redirect_status => 'permanent',
-        redirect_dest   => "https://${::fqdn}",
-        manage_docroot  => false,
-      }
+  class{'::apache::mod::proxy_fcgi':}
 
-      apache::vhost { "${::fqdn}-https":
-        port              => 443,
-        serveradmin       => 'root@localhost',
-        servername        => "${::fqdn}",
-        docroot           => '/var/www/MISP/app/webroot/',
-        manage_docroot    => false,
-        directoryindex    => 'index.php',
-        override          => all,
-        ssl               => true,
-        ssl_cert          => "/etc/pki/tls/certs/${::fqdn}.crt",
-        ssl_key           => "/etc/pki/tls/certs/${::fqdn}.key",
-        log_level         => 'warn',
-        error_log_file    => 'misp.local_error.log',
-        access_log_file   => 'misp.local_access.log',
-        access_log_format => 'combined',
-        ssl_proxyengine   => true,
-        setenvif          => ['Authorization "(.*)" HTTP_AUTHORIZATION=$1'],
-        proxy_pass_match  => [
-          {
-            'path'         => '^/(.*\.php(/.*)?)$',
-            'url'          => "fcgi://127.0.0.1:9000/var/www/MISP/app/webroot/",
-            'reverse_urls' => ["fcgi://127.0.0.1:9000/var/www/MISP/app/webroot/"],
-          },
-        ],   
-      }
-    }
-    ```
+  apache::vhost { "${::fqdn}-http":
+    port              => '80',
+    serveradmin       => 'root@localhost',
+    servername        => "${::fqdn}",
+    docroot           => '/var/www/MISP/app/webroot/',
+    redirect_status => 'permanent',
+    redirect_dest   => "https://${::fqdn}",
+    manage_docroot  => false,
+  }
 
-5. Run puppet:
+  apache::vhost { "${::fqdn}-https":
+    port              => 443,
+    serveradmin       => 'root@localhost',
+    servername        => "${::fqdn}",
+    docroot           => '/var/www/MISP/app/webroot/',
+    manage_docroot    => false,
+    directoryindex    => 'index.php',
+    override          => all,
+    ssl               => true,
+    ssl_cert          => "/etc/pki/tls/certs/${::fqdn}.crt",
+    ssl_key           => "/etc/pki/tls/certs/${::fqdn}.key",
+    log_level         => 'warn',
+    error_log_file    => 'misp.local_error.log',
+    access_log_file   => 'misp.local_access.log',
+    access_log_format => 'combined',
+    ssl_proxyengine   => true,
+    setenvif          => ['Authorization "(.*)" HTTP_AUTHORIZATION=$1'],
+    proxy_pass_match  => [
+      {
+        'path'         => '^/(.*\.php(/.*)?)$',
+        'url'          => "fcgi://127.0.0.1:9000/var/www/MISP/app/webroot/",
+        'reverse_urls' => ["fcgi://127.0.0.1:9000/var/www/MISP/app/webroot/"],
+      },
+    ],   
+  }
+}
+```
 
-    ```
-    puppet apply /etc/puppet/manifests/site.pp
-    ```
+### Run Puppet
 
-    Note that `site.pp` is the name that we gave to the manifest created in step number 4, but it can take whatever other name.
+```
+puppet apply /etc/puppet/manifests/site.pp
+```
 
-6. Load the DB schema:
+Note that `site.pp` is the name that we gave to the manifest created in step number 4, but it can take whatever other name.
 
-    ```
-    mysql -D misp -u misp -p < /var/www/MISP/INSTALL/MYSQL.sql
-    ```
+### Load the DB schema
 
-    The default password is `mispdb`.
+```
+mysql -D misp -u misp -p < /var/www/MISP/INSTALL/MYSQL.sql
+```
 
-    Once all this has been done we can connect to the MISP instance in the browser using the IP address of the VM. It will ask for credentials, the default ones being:
+The default password is `mispdb`.
 
-    ```
-    user       -  admin@admin.test
-    password   -  admin
-    ```
+Once all this has been done we can connect to the MISP instance in the browser using the IP address of the VM. It will ask for credentials, the default ones being:
 
-    At the first login change the password as requested.
+```
+user       -  admin@admin.test
+password   -  admin
+```
 
-7. Additional packages
+At the first login change the password as requested.
 
-    You will need to install the `rh-php56-php-opcache` package to be able to edit the configuration from the UI (Administration section).
+### Additional packages
 
-    ```
-    yum install rh-php56-php-opcache
-    ```
+You will need to install the `rh-php56-php-opcache` package to be able to edit the configuration from the UI (Administration section).
 
-    After installing this package please remember to start the `rh-php56-php-fpm` service:
+```
+yum install rh-php56-php-opcache
+```
 
-    ```
-    systemctl restart rh-php56-php-fpm
-    ```
+After installing this package please remember to start the `rh-php56-php-fpm` service:
+
+```
+systemctl restart rh-php56-php-fpm
+```
 
 ## Using Puppet in agent / master mode
 
@@ -324,3 +326,5 @@ There are other options to deploy a MISP instance. However, these have not been 
 
 - [MISP Ansible playbook](https://github.com/MISP/ansible)
 - [Manual Installation](https://github.com/MISP/MISP/tree/2.4/INSTALL)
+- [RPM Installation](https://github.com/amuehlem/MISP-RPM)
+- [Docker image](https://github.com/harvard-itsecurity/docker-misp)

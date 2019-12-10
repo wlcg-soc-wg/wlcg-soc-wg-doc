@@ -3,20 +3,17 @@
 A useful tool to inspect and alarm specific metrics is Elastalert. It is a service which can be run externally to Elasticsearch. It is used at CERN to get notified about specific conditions which are being monitored, like the size of indices, rate of events or the used space above quota. 
 
 ## Installation
-Elastalert can be found here:
-https://github.com/Yelp/elastalert
+Elastalert can be found here: <https://github.com/Yelp/elastalert>
 
 CERN can provide an RPM package for it.
 
 ## Usage
-Documentation can be found here:
-
-http://elastalert.readthedocs.io/en/latest/
+Documentation can be found here: <http://elastalert.readthedocs.io/en/latest/>
 
 ## Example usage from our monitoring
-Let's say you have an indices which are named ```monitor_usage-<date>```. The document ID (```_id```) is the name of an index, and the documents of type ```disk_usage``` contain (at least) 4 fields, giving the size of that index (```size```), the number of shards ```shards```, the name of the cluster (```cluster```) in which this index lives, and a time stamp (```time```). 
+Let's say you have an indices which are named `monitor_usage-<date>`. The document ID (`_id`) is the name of an index, and the documents of type `disk_usage` contain (at least) 4 fields, giving the size of that index (`size`), the number of shards `shards`, the name of the cluster (`cluster`) in which this index lives, and a time stamp (`time`). 
 
-The use case is to check on a weekly basis indices which have a size larger than some threshold. A mail should be send every Monday reporting all indices whoes size exceeds a threshold, taking into account the number of shards. 
+The use case is to check on a weekly basis indices which have a size larger than some threshold. A mail should be send every Monday reporting all indices whose size exceeds a threshold, taking into account the number of shards. 
 
 A sample configuration for ElastAlert could look like this:
 

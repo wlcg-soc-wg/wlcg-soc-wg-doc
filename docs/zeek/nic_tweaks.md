@@ -5,6 +5,7 @@ Normally, Zeek's event engine will discard packets which don't have valid checks
 A solution to that is to disable checksum offloading for your network adapter, but this is not always possible or desirable. Disable checksum offloading on the NIC using `ethtool --offload <int> rx off tx off` so the correct checksums are generated to begin with. Replacing `<int>` with the name of your interface.
 
 Other tweaks to be made at the NIC level is to disable WOL and to increase the RX and TX ring parameters to higher values (for example 4096), both for RX and TX:
+
 ```
 ethtool -s <int> wol d
 ethtool -G <int> rx 4096 tx 4096
@@ -22,9 +23,8 @@ ethtool -G <int> rx 4096 tx 4096
 ```
 
 If the percent_lost is more than 1% then something is not right. One of the issue we have seen is default setting of ethernet card which can be changed through ethtool.
-Full explanation is here:
+Full explanation is here: <https://blog.securityonion.net/2011/10/when-is-full-packet-capture-not-full.html>
 
-https://blog.securityonion.net/2011/10/when-is-full-packet-capture-not-full.html
 ```
 ethtool -K eth0 rx off
 ethtool -K eth0 tx off
