@@ -1,0 +1,3 @@
+# What is a SOC?
+
+A Security Operations Centre, or SOC, is a collection of processes, people and technologies that support the cybersecurity staff of an organisation in identifying anomalies in their environment and in successfully investigating security incidents. An appropriately scoped and sized SOC deployment should augment the existing activities of a security program through automation and monitoring, allowing for better detection time, integration of threat intelligence from other sources, and more effective and timely incident response. 
