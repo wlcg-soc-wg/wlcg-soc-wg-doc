@@ -27,7 +27,7 @@ We expire intel items after 20 minutes. Assuming that you have your MISP to Zeek
 
 Of course you are free to adapt the type of IoCs that you want to use for detection.
 
-## Base setup
+## Advanced setup
 
 For a more advanced setup you can use something like this:
 
@@ -62,85 +62,85 @@ Under `/opt/bro/share/bro/site/` create a directory called `notice-extensions`. 
 
 1. One file named `__load__.bro` and containing:
 
-    ```
-    @load ./do_notice.bro
-    ```
+```
+@load ./do_notice.bro
+```
 
 2. Another file called `do_notice.bro` and containing:
 
-    ```
-    # Extends the orginal script to add an identifier to the notices.
-    # Jan Grashoefer (jan.grashofer@cern.ch) and Liviu Valsan (liviu.valsan@cern.ch)
-    # Original script is part of Zeek.
+```
+# Extends the orginal script to add an identifier to the notices.
+# Jan Grashoefer (jan.grashofer@cern.ch) and Liviu Valsan (liviu.valsan@cern.ch)
+# Original script is part of Zeek.
 
-    @load base/frameworks/intel
-    @load base/frameworks/notice
+@load base/frameworks/intel
+@load base/frameworks/notice
 
-    module Intel;
+module Intel;
 
-    export {
-            redef enum Notice::Type += {
-                    ## Intel::Notice is a notice that happens when an intelligence
-                    ## indicator is denoted to be notice-worthy.
-                    Intel::Notice
-            };
+export {
+        redef enum Notice::Type += {
+                ## Intel::Notice is a notice that happens when an intelligence
+                ## indicator is denoted to be notice-worthy.
+                Intel::Notice
+        };
 
-            redef record Intel::MetaData += {
-                    ## A boolean value to allow the data itself to represent
-                    ## if the indicator that this metadata is attached to
-                    ## is notice worthy.
-                    do_notice: bool &default=F;
+        redef record Intel::MetaData += {
+                ## A boolean value to allow the data itself to represent
+                ## if the indicator that this metadata is attached to
+                ## is notice worthy.
+                do_notice: bool &default=F;
 
-                    ## Restrictions on when notices are created to only create
-                    ## them if the *do_notice* field is T and the notice was
-                    ## seen in the indicated location.
-                    if_in: Intel::Where &optional;
-            };
-    }
+                ## Restrictions on when notices are created to only create
+                ## them if the *do_notice* field is T and the notice was
+                ## seen in the indicated location.
+                if_in: Intel::Where &optional;
+        };
+}
 
-    event Intel::match(s: Seen, items: set[Item])
+event Intel::match(s: Seen, items: set[Item])
+    {
+    for ( item in items )
         {
-        for ( item in items )
+        if ( item$meta$do_notice &&
+            (! item$meta?$if_in || s$where == item$meta$if_in) )
             {
-            if ( item$meta$do_notice &&
-                (! item$meta?$if_in || s$where == item$meta$if_in) )
+            local n = Notice::Info($note=Intel::Notice,
+            $msg = fmt("Intel hit on %s at %s", s$indicator, s$where),
+            $sub = cat("Indicator = ", s$indicator));
+
+            if ( s?$conn )
                 {
-                local n = Notice::Info($note=Intel::Notice,
-                $msg = fmt("Intel hit on %s at %s", s$indicator, s$where),
-                $sub = cat("Indicator = ", s$indicator));
+                n$conn = s$conn;
 
-                if ( s?$conn )
+                # Add identifier composed of indicator, originator's and responder's IP,
+                # without considering the direction of the flow.
+                local intel_id = s$indicator;
+                if( s$conn?$id )
                     {
-                    n$conn = s$conn;
-
-                    # Add identifier composed of indicator, originator's and responder's IP,
-                    # without considering the direction of the flow.
-                    local intel_id = s$indicator;
-                    if( s$conn?$id )
-                        {
-                        if( s$conn$id$orig_h < s$conn$id$resp_h)
-                            intel_id = cat(intel_id, s$conn$id$orig_h, s$conn$id$resp_h);
-                        else
-                            intel_id = cat(intel_id, s$conn$id$resp_h, s$conn$id$orig_h);
-                        }
-                    n$identifier = intel_id;
+                    if( s$conn$id$orig_h < s$conn$id$resp_h)
+                        intel_id = cat(intel_id, s$conn$id$orig_h, s$conn$id$resp_h);
+                    else
+                        intel_id = cat(intel_id, s$conn$id$resp_h, s$conn$id$orig_h);
                     }
-
-                # Add additional information to the generated mail
-                local srv_str = "";
-                for ( srv in s$conn$service )
-                    srv_str = cat(srv_str, srv, " ");
-                local mail_ext = vector(
-                    fmt("Service: %s", srv_str),
-                    fmt("Description: %s", item$meta$desc),
-                    fmt("URL: %s", item$meta$url),
-                    fmt("Intel source: %s", item$meta$source));
-                n$email_body_sections = mail_ext;
-
-                NOTICE(n);
+                n$identifier = intel_id;
                 }
+
+            # Add additional information to the generated mail
+            local srv_str = "";
+            for ( srv in s$conn$service )
+                srv_str = cat(srv_str, srv, " ");
+            local mail_ext = vector(
+                fmt("Service: %s", srv_str),
+                fmt("Description: %s", item$meta$desc),
+                fmt("URL: %s", item$meta$url),
+                fmt("Intel source: %s", item$meta$source));
+            n$email_body_sections = mail_ext;
+
+            NOTICE(n);
             }
         }
-    ```
+    }
+```
 
 This improves the notifications sent by Zeek to include context from MISP and also to suppress further alerts for the same IoC and the same device for the next 12 hours.
