@@ -61,3 +61,15 @@ yum clean all
 
 yum install zeek
 ```
+
+## Sample environment variable script
+
+`/etc/profile.d/zeek.sh`
+
+```
+#!/bin/bash
+# General environment variables
+export PATH=/opt/zeek/bin${PATH:+:${PATH}}
+export MANPATH=/opt/zeek/share/man:${MANPATH}
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/zeek/lib
+```
