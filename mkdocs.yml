@@ -27,6 +27,7 @@ nav:
     - Troubleshooting and debugging MISP: threat_intelligence/misp/troubleshooting.md
     - Sharing threat intelligence: threat_intelligence/misp/sharing.md
     - Contributing to the upstream Puppet module: threat_intelligence/misp/contributing_puppet_module.md
+    - OIDC: threat_intelligence/misp/oidc.md
 - Data sources:
   - Zeek:
     - Introduction: data_sources/zeek/index.md
