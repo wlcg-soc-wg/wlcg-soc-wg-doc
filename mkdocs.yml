@@ -33,9 +33,7 @@ nav:
     - Introduction: data_sources/zeek/index.md
     - Hardware requirements: data_sources/zeek/hardware_requirements.md
     - Recommended operating system: data_sources/zeek/recommended_os.md
-    - Software repository: data_sources/zeek/software_repository.md
     - Capture Network Interface Card tweaks: data_sources/zeek/nic_tweaks.md
-    - Deploying PF_RING: data_sources/zeek/deployment_pfring.md
     - Deploying Zeek: data_sources/zeek/deployment_zeek.md
     - Configuration: data_sources/zeek/configuration.md
     - Alerting: data_sources/zeek/intel.md
