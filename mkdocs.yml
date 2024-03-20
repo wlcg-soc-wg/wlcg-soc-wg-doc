@@ -1,0 +1,77 @@
+site_author: SOC WG
+site_description: Documentation for the Security Operations Centers Working Group
+site_name: Security Operations Centers Working Group documentation
+site_url: https://wlcg-soc-wg-doc.web.cern.ch
+
+theme:
+  name: material
+  font: false
+
+extra_css:
+  - stylesheets/fonts.css
+
+use_directory_urls: false
+
+nav:
+- Introduction: index.md
+- What is a SOC?: preamble/whatisasoc.md
+- Should I deploy a SOC?: preamble/shouldideployasoc.md
+- Reference design: reference_design/reference_design.md
+- Threat Intelligence:
+  - MISP:
+    - Introduction: threat_intelligence/misp/index.md
+    - Deployment: threat_intelligence/misp/deployment.md
+    - Configuration: threat_intelligence/misp/configuration.md
+    - Syncing with WLCG instance: threat_intelligence/misp/sync.md
+    - Setting up GnuPG: threat_intelligence/misp/gnupg.md
+    - Troubleshooting and debugging MISP: threat_intelligence/misp/troubleshooting.md
+    - Sharing threat intelligence: threat_intelligence/misp/sharing.md
+    - Contributing to the upstream Puppet module: threat_intelligence/misp/contributing_puppet_module.md
+    - OIDC: threat_intelligence/misp/oidc.md
+- Data sources:
+  - Zeek:
+    - Introduction: data_sources/zeek/index.md
+    - Hardware requirements: data_sources/zeek/hardware_requirements.md
+    - Recommended operating system: data_sources/zeek/recommended_os.md
+    - Software repository: data_sources/zeek/software_repository.md
+    - Capture Network Interface Card tweaks: data_sources/zeek/nic_tweaks.md
+    - Deploying PF_RING: data_sources/zeek/deployment_pfring.md
+    - Deploying Zeek: data_sources/zeek/deployment_zeek.md
+    - Configuration: data_sources/zeek/configuration.md
+    - Alerting: data_sources/zeek/intel.md
+    - JSON Logs: data_sources/zeek/json.md
+- Messaging, Transport and Enrichment:
+  - Introduction: messaging_transport_enrichment/index.md
+- Enrichment Sources:
+  - Introduction: enrichment_sources/index.md
+- Storage:
+  - Elasticsearch:
+    - Introduction: storage/es/index.md
+    - CERN Setup: storage/es/cern/index.md
+    - Best practices: storage/es/best/index.md
+    - Aggregating data: storage/es/best/aggregations.md
+    - Indices: storage/es/best/indices.md
+    - Shards: storage/es/best/shards.md
+    - Replicas: storage/es/best/replicas.md
+    - Fields: storage/es/best/fields.md
+    - Keyword: storage/es/best/keyword.md
+    - Norms: storage/es/best/norms.md
+    - Slowlogs: storage/es/best/slowlogs.md
+    - Aliases: storage/es/best/alias.md
+    - Cluster Organization: storage/es/best/cluster.md
+    - Anomaly detection and Alarming: storage/es/anodet/index.md
+    - ElastAlert: storage/es/anodet/elastalert.md
+    - Troubleshooting: storage/es/troubleshooting/index.md
+- Visualisation:
+  - Introduction: visualisation/index.md
+- Alerting + Incident Response:
+  - Introduction: alerting_and_incident_response/index.md
+- Other topics and materials:
+  - Integrations:
+    - Introduction: other/integrations/index.md
+    - MISP to Zeek: other/integrations/misp_zeek.md
+  - Networking:
+    - Introduction: other/network/index.md
+    - Network layout and mirroring at CERN: other/network/cern.md
+  - Glossary: other/glossary.md
+  - Resources: other/resources.md
