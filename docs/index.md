@@ -5,3 +5,5 @@ Created by the [WLCG Security Operations Centers Working Group](https://wlcg-soc
 The audience for these documents is anyone interested in deploying SOC capabilities for your site or organisation, as well as anyone interested in cybersecurity interoperability in the research and education communities.
 Note that we discuss here the technology deployment work necessary to deploy a minimum workable SOC. In order to operate a production SOC environment, it is critical to also consider the staffing and processes involved in developing and operating the SOC as well as appropriate training and drills.
 
+**Update March 2024**: As discussed at the most recent SOC WG [SOC Hackathon](https://indico.cern.ch/event/1370544/overview), we will be expanding the work of this working group to include discussions of people and processes, and the material on this site will expand to reflect that.
+
