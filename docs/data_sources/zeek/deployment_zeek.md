@@ -7,9 +7,9 @@ Zeek packages are available from the main [zeek website](https://zeek.org/get-ze
 
 The following repositories are compatible with Rocky9/Alma9 and RHEL9
 
-- https://linuxsoft.cern.ch/repos/zeek9-qa/ **recommended**
-- https://linuxsoft.cern.ch/repos/zeek9-stable/ **still in testing**
-- https://linuxsoft.cern.ch/repos/zeek9-testing/
+- [https://linuxsoft.cern.ch/repos/zeek9-qa/](https://linuxsoft.cern.ch/repos/zeek9-qa/) **recommended**
+- [https://linuxsoft.cern.ch/repos/zeek9-stable/](https://linuxsoft.cern.ch/repos/zeek9-stable/) **still in testing**
+- [https://linuxsoft.cern.ch/repos/zeek9-testing/](https://linuxsoft.cern.ch/repos/zeek9-testing/)
 
 ### Example repo file based on CERN repos (Alma9/Rocky9)
 
