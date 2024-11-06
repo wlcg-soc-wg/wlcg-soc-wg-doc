@@ -38,3 +38,4 @@ Maturing SOC
 - Provide threat intelligence to the wider community as able
 
 To help decide which path is most suitable for an organisation should consider what their goals in SOC participation are and what level of long term resources they are able to devote to the project.  The pDNSSOC model is a low cost and very rapid way to increase the effectiveness of their security operation but is limited in scope and is not designed to be built upon over time.  The Essential SOC aims to be the entry point for a multi-component SOC that allows for monitoring and alerting on network packet data which can integrate multiple sources of threat intelligence and data enrichment.  It requires substantially more investment in both time, resources, and technical expertise, the upside of which is that it is highly configurable and adaptable to many sizes and types of institutions and allows for a variety of outcomes of alerting, threat intelligence sharing, and scalability.
+
