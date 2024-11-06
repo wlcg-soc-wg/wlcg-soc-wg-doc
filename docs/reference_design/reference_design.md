@@ -52,4 +52,4 @@ Finally, collecting all this data will likely not provide value unless you can t
 - How is this made available to responders, and further integrated into new or existing incident management systems
 
 ## External interfaces
-A vital aspect of cybersecurity across the modern R&E environment is sharing intelligence, best practices and procedures. Hence, interoperability between SOC environments is essential to allow for the most effective collaboration between sites and organisations.
+A vital aspect of cybersecurity across the modern Research and Education environment is sharing intelligence, best practices and procedures. Hence, interoperability between SOC environments is essential to allow for the most effective collaboration between sites and organisations.
