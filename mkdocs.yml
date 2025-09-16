@@ -64,10 +64,10 @@ nav:
   - Introduction: visualisation/index.md
 - Alerting + Incident Response:
   - Introduction: alerting_and_incident_response/index.md
+- Integrations:
+  - Introduction: other/integrations/index.md
+  - MISP to Zeek: other/integrations/misp_zeek.md
 - Other topics and materials:
-  - Integrations:
-    - Introduction: other/integrations/index.md
-    - MISP to Zeek: other/integrations/misp_zeek.md
   - Networking:
     - Introduction: other/network/index.md
     - Network layout and mirroring at CERN: other/network/cern.md
