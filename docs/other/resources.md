@@ -2,4 +2,4 @@
 
 ## Zeek
 
-* [Zeek Cheat Sheet](http://gauss.ececs.uc.edu/Courses/c6055/pdf/bro_log_vars.pdf)
+* [Zeek Cheat Sheet](https://ns2.elhacker.net/cheat-sheet/Bro-Cheatsheets-2.6.pdf)
