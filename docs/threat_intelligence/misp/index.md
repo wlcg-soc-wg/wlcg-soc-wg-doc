@@ -6,3 +6,4 @@
 - [Access to WLCG MISP instance](sync.md)
 - [Sharing with other peers](sharing.md)
 - [Contributing to the upstream Puppet module](contributing_puppet_module.md)
+- [Automation in MISP](automation.md)
