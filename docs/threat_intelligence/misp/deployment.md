@@ -2,7 +2,7 @@
 
 ## Operating System ​
 
-MISP can be deployed on a wide variety of different operating systems. The platform of choice inside WLCG is obviously Linux. Similarly to the myriad of operating systems supported, MISP can be deployed on a variety of different Linux distributions. Sites are free to choose the operating system and the Linux distribution. Nonetheless, we strongly recommend using CentOS 7 / SL 7 / RHEL 7. That's the distribution used at CERN and all provided resources (installation packages, configuration management code, documentation, scripts, etc) have been developed and tested on CentOS 7. MISP has dependencies on some package versions newer than what's available with CentOS 7 out of the box. The EPEL (Extra Packages for Enterprise Linux) repository and Software Collections are needed.
+MISP can be deployed on a wide variety of different operating systems. The platform of choice inside WLCG is obviously Linux. Similarly to the myriad of operating systems supported, MISP can be deployed on a variety of different Linux distributions. Sites are free to choose the operating system and the Linux distribution. Nonetheless, we strongly recommend using RHEL 8/9 or appropriate distributions such as Rocky or Alma. CERN, for example, use Alma Linux and all provided resources (installation packages, configuration management code, documentation, scripts, etc) here have been developed and tested on Alma Linux. 
 
 ## System Requirements
 
