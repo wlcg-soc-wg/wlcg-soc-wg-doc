@@ -17,6 +17,7 @@ nav:
 - What is a SOC?: preamble/whatisasoc.md
 - Should I deploy a SOC?: preamble/shouldideployasoc.md
 - Reference design: reference_design/reference_design.md
+- How to make changes to docs: preamble/howtomakechangestothesedocs.md
 - Threat Intelligence:
   - MISP:
     - Introduction: threat_intelligence/misp/index.md
