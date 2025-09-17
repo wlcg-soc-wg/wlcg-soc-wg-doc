@@ -11,7 +11,7 @@ For a basic setup you can use something like this:
 
 redef Intel::item_expiration = 20min;
 
-const feed_directory = "/data/bro/feeds";
+const feed_directory = "/data/zeek/feeds";
 
 redef Intel::read_files += {
 # MISP feeds
@@ -39,7 +39,7 @@ For a more advanced setup you can use something like this:
 
 redef Intel::item_expiration = 20min;
 
-const feed_directory = "/data/bro/feeds";
+const feed_directory = "/data/zeek/feeds";
 
 redef Intel::read_files += {
 # MISP feeds
@@ -58,15 +58,15 @@ redef Notice::type_suppression_intervals += {
 };
 ```
 
-Under `/opt/bro/share/bro/site/` create a directory called `notice-extensions`. There place 2 files:
+Under `/opt/zeek/share/zeek/site/` create a directory called `notice-extensions`. There place 2 files:
 
-1. One file named `__load__.bro` and containing:
+1. One file named `__load__.zeek` and containing:
 
 ```
-@load ./do_notice.bro
+@load ./do_notice.zeek
 ```
 
-2. Another file called `do_notice.bro` and containing:
+2. Another file called `do_notice.zeek` and containing:
 
 ```
 # Extends the orginal script to add an identifier to the notices.

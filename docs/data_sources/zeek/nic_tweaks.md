@@ -14,7 +14,7 @@ ethtool -G <int> rx 4096 tx 4096
 ## Test whether Zeek is capturing all data
 
 ```
- cat capture_loss.log | bro-cut -d percent_lost
+ cat capture_loss.log | zeek-cut -d percent_lost
 0.027187
 0.186245
 0.009625
